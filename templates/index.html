@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <title>CardIAca - Predição de Doença Cardíaca</title>
+        <link rel="icon" type="image/png" href="\static\images\logo.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="\static\style.css">
+        
+    </head>
+    <body>
+
+        <header>
+            <div>
+                <h1>Card<span>IA</span>ca</h1>
+                <strong>Predição de Doença Cardíaca</strong>
+            </div>
+            <img src="static\images\logo.png" alt="cardIAca logo">
+        </header>
+
+        <main id="flex">
+            <form method="post" action="/predict">
+                <h2 id="form-text">Predição de Doença Cardíaca</h2>
+                <section id="grid">
+                    <div>
+                        <label>Idade</label>
+                        <input type="number" name="age" required>
+
+                        <label>Tipo de Dor no Peito</label>
+                        <select name="cp" required>
+                            <option value="1">Dor no peito durante esforço</option>
+                            <option value="2">Dor no peito ocasional</option>
+                            <option value="3">Desconforto no peito</option>
+                            <option value="4">Nenhuma dor no peito</option>
+                        </select>
+
+                        <label>Colesterol total (mg/dL)</label>
+                        <input type="number" name="chol" required>
+                        
+                        <label>Resultado do eletro em repouso</label>
+                        <select name="restecg" required>
+                        <option value="0">Normal</option>
+                        <option value="1">Alterado</option>
+                        <option value="2">Espessamento do músculo do coração</option>
+                        <option value="0">Não sei</option>
+                        </select>
+
+                        <label>Dor no peito durante atividade física?</label>
+                        <select name="exang" required>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+
+                        <label>Comportamento do coração durante esforço</label>
+                        <select name="slope" required>
+                            <option value="1">Normal</option>
+                            <option value="2">Estável</option>
+                            <option value="3">Alterado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Sexo</label>
+                        <select name="sex" required>
+                            <option value="1">Masculino</option>
+                            <option value="0">Feminino</option>
+                        </select>
+
+                        <label>Pressão Arterial em Repouso</label>
+                        <input type="number" name="trestbps" required>
+
+                        <label>Glicose alta em jejum?</label>
+                        <select name="fbs" required>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                            <option value="0">Não sei</option>
+                        </select>
+
+                        <label>Frequência Cardíaca Máxima</label>
+                        <input type="number" name="thalach" required>
+
+                        <label>Alteração no eletro durante esforço <br> (0.0 a 6.0)</label>
+                        <input type="number" step="0.1" min="0" max="6" name="oldpeak" required>
+                        
+                        
+                        <label>Resultado do exame de estresse do coração</label>
+                        <select name="thal" required>
+                            <option value="3">Normal</option>
+                            <option value="6">Alteração permanente</option>
+                            <option value="7">Alteração que aparece com esforço</option>
+                            <option value="3">Não sei</option>
+                        </select>
+                    </div>
+                </section>
+                <label>Quantidade de vasos do coração com obstrução detectada</label>
+                    <select name="ca" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="0">Não sei</option>
+                    </select>
+                <button type="submit">Fazer Predição</button>
+            </form>
+            <section id="artigo">
+                <article id="alerta">
+                    <h2>⚠️ Atenção</h2>
+
+                    <p>
+                        O resultado apresentado é uma estimativa baseada em inteligência artificial
+                        e não substitui um diagnóstico médico.
+                    </p>
+
+                    <h3>Sobre informações desconhecidas</h3>
+                    <p>
+                        Campos marcados como "Não sei" utilizam valores padrão e podem influenciar
+                        a precisão do resultado.
+                    </p>
+
+                    <h3>Precisão do modelo</h3>
+                    <p>
+                        O modelo apresenta uma precisão aproximada de 87%, mas ainda pode cometer erros.
+                    </p>
+                </article>
+                <h2>Resultados:</h2>
+                <div id="flex-artigo">
+                    <article id="resultado">
+                        {% if prediction_text %}
+                        <img id="resultado_img" src="{{ url_for('static', filename='images/' + img) }}" alt="prediction_img">
+                        <div>
+                            <h3>{{ prediction_text }}</h3>
+                            <hr>
+                            <p>Probabilidade estimada: <strong>{{ probability }}</strong></p>
+                        </div>
+                        {% endif %}
+                    </article>
+                    <article id="precisao">
+                        <img id="icone_precisao" src="\static\images\icone_precisao.png" alt="icone_precisao">
+                        <h1>87%</h1>
+                        <p>Precisão do Modelo</p>
+                    </article>
+                </div>
+                <h2>Informações sobre Saúde Cardíaca:</h2>
+                <div id="flex-artigo">
+                    <a href="{{ url_for('informacoes') }}">
+                        <article id="informacoes">
+                            <img id="icone_informacoes" src="static\images\icone_informacoes.png" alt="icone_informacoes">
+                            <div>
+                                <h3>Fatores de Risco</h3>
+                                <p>Principais Fatores de Risco</p>
+                            </div>
+                        </article>
+                    </a>
+                    <a href="{{ url_for('informacoes') }}">
+                        <article id="prevencao">
+                            <img id="icone_prevencao" src="static\images\icone_prevencao.png" alt="icone_prevencao">
+                            <div>
+                                <h3>Dicas de Prevenção</h3>
+                                <p>Maneiras de Reduzir o Risco</p>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+            </section>
+        </main>
+        <footer id="site-footer">
+            <div id="footer-content">
+                <p id="footer-title">Card<span>IA</span>ca</p>
+                <p id="footer-text">Sistema de apoio à decisão baseado em Inteligência Artificial.</p>
+                <p id="footer-warning">⚠️ Este resultado não substitui avaliação médica profissional.</p>
+                <p id="footer-copy"> © 2025 CardIAca</p>
+            </div>
+        </footer>
+    </body>
+</html>
