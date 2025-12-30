@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import numpy as np
 import joblib
@@ -97,4 +98,5 @@ def informacoes():
 
 
 if __name__ == '__main__':
-    app.run
+    debug = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
+    app.run(debug=debug)
